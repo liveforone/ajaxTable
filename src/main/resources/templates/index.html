@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script type="text/javascript">
+window.onload = function() {
+	var httpRequest;
+	// 호출 버튼을 클릭하였을 때, 데이터를 요청하고 받아오는 Ajax 구현 부분
+	document.getElementById("ajaxCall").addEventListener('click', () => {
+		httpRequest = new XMLHttpRequest();
+	    httpRequest.onreadystatechange = () => {
+		    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+			      if (httpRequest.status === 200) {
+			    	  document.getElementById("memberTable").innerHTML = httpRequest.response;
+			      } else {
+			        alert('Request Error!');
+			      }
+		    }
+	    };
+	    httpRequest.open('GET', '/get/member');
+	    httpRequest.send();
+	});
+}
+</script>
+</head>
+<body>
+<h1>AJAX TEST</h1>
+<button id="ajaxCall">호출</button><br><br>
+
+<table id="memberTable" th:fragment="memberTable">
+    <tr>
+        <th>아이디</th>
+        <th>이름</th>
+    </tr>
+    <tr th:each="member : ${memberList}">
+        <td th:text="${member.key}" />
+        <td th:text="${member.value}" />
+    </tr>
+</table>
+
+</body>
+</html>
